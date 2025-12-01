@@ -1,3 +1,18 @@
+## 7.2.2.79741 Dec 1 2025 [8770903]
+#### new features
+- **TEMPORARY/EXPERIMENTAL** SLua support
+- this adds the ability to write and compile SLua support in the script editor
+- choose "SLua" from the drop-down menu in the script editor and save your script
+- this will be removed/replaced at a later date when Firestorm implements it properly
+- this adapted from the Linden viewer which is also in a very beta stage and inherits it's issues
+    - syntax highlight for SLua is broken - use an external editor
+    - the websocket stuff for vscode is broken
+    - requires the Firestorm preprocessor to disabled
+    - SLua only compiles in [SLua regions](https://maps.secondlife.com/secondlife/SLua%20Beta%20Void/32/32/23)
+  
+#### bug fixes
+- exporting rigged .dae now exports joint positions properly
+
 ## 7.2.2.79738 Nov 23 2025 [bc2890d]
 #### bug fixes
 - fix anim preview priority handling and add metadata description update
