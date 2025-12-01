@@ -1,4 +1,4 @@
-## 7.2.2.79742 Dec 1 2025 [7f1d5f1]
+## 7.2.2.79741 Dec 1 2025 [6122e09]
 #### new features
 - **TEMPORARY/EXPERIMENTAL** SLua support
 - this adds the ability to write and compile SLua support in the script editor
