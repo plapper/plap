@@ -1,3 +1,39 @@
+## 7.2.3.80275 Jan 1 2026 [7ff308bb44]
+- merged with the latest firestorm upstream changes to include:
+    - omnifilter (block chat, dialogs, teleport offers, friendship, etc. based on content rather than just owner or sender)
+    - poser translation manipulators (drag arrows to reposition bones)
+    - pinning/unpinning groups in the people and contacts floater
+    - chat spheres (Ctrl-Shift-N, display spheres to visualize chat ranges)
+    - fix for ctrl+backspace and ctrl+delete not updating visually
+- anim explorer now keeps track of anims in the background, displaying all anims played within the last 60 seconds as well as currently playing anims
+- moved aero tokens window from debug menu to help menu, no longer need to enable debug menu to access it
+- removed my implementation of the poser translation manipulators (due to it being added in upstream firestorm)
+- reattaching via outfit now re-attaches to previous attachment point instead of defaulting to chest
+- removed dual token auth system (access token + feature token) with token system using level-based permissions (0-4)
+    - level 0: login only
+    - level 1: level 0 + access to level 1 features (tester)
+    - level 2: level 1 + access to level 2 features (debugger)
+    - level 3: level 2 + access to level 3 features (dev)
+    - level 4: access to ALL features (admin)
+
+#### RLV changes
+view [AERO_RLV.md](https://github.com/plapper/plap/blob/main/AERO_RLV.md) for full documentation
+- **NEW**
+    - `@avataranim_list:<target>;<type>=<channel>`
+    - `@sendim:<target>;<message>=force`
+    - hud message console system `@hudmsg_*`
+- simplify `@avatarrotation` RLV command to use z-axis only
+- `@sendsay` `@sendshout` `@sendwhisper` unified into: `@sendlocalchat:<type>;<channel>;<message>=force`
+- refactored the following commands into proper syntax:
+    - `@outfitname`
+    - `@uploadthumbnail`
+    - `@uploadasset`
+    - `@resetskeleton`
+    - `@takesnapshot`
+- `@avataranim` is split into:
+    - `@avataranim_start:<target>;<anim>;<priority>;<loop>;<local>=force`
+    - `@avataranim_stop:<target>;<anim>=force`
+  
 ## 7.2.2.79741 Dec 1 2025 [6122e09]
 #### new features
 - **TEMPORARY/EXPERIMENTAL** SLua support
