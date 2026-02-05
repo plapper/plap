@@ -1,14 +1,23 @@
-
-
 ## camera/view
 
-### `@setcam_target:<uuid>=n|y`
+### `@setcam_target:<uuid>[;<thirdperson>]=force`
 sets the camera target to a specific object or avatar UUID
-when active, the camera will continously focus on the specified target
+when active, the camera will continuously focus on the specified target
 
 | param | desc |
 |-----------|-------------|
-| `<uuid>` | UUID of the object or avatar to target |
+| `<uuid>` | UUID of the object or avatar to target, or `none` to clear |
+| `<thirdperson>` | (optional) `0` = apply only in mouselook (default), `1` = also apply in 3rd person camera |
+
+
+### `@setcam_anchor:<target>=force`
+anchors the camera to a specific position or object/avatar
+if using a vector, camera rotation is preserved
+otherwise it adopts the rotation of the object/avatar
+
+| param | desc |
+|-----------|-------------|
+| `<target>` | UUID of object/avatar, or `x/y/z` region coordinates, or `none` to clear |
 
 
 ## outfits
@@ -131,7 +140,7 @@ forces the avatar to stop the typing animation/indicator in local chat
 
 ## snapshots
 
-### `@takesnapshot[:outputpath;x/y/z;x/y/z;rebuild;delay]=force`
+### `@takesnapshot[:outputpath;x/y/z;x/y/z;rebuild;delay]=<channel>`
 takes a snapshot with optional camera positioning and output path
 
 | param | desc |
@@ -141,6 +150,7 @@ takes a snapshot with optional camera positioning and output path
 | `x/y/z` | (optional) camera look-at coordinates |
 | `rebuild` | (optional) 1 to rebuild scene, 0 otherwise (idk if this even works)|
 | `delay` | (optional) delay in seconds before taking snapshot (0-10) |
+| `channel` | channel number to send the reply on |
 
 
 ### `@takesnapshot_size:width;height=force`
@@ -285,9 +295,23 @@ updates the content of the specified console, if console does not exist, a new o
 |-----------|-------------|
 | identifier | used to identify which console to affect |
 | action | `0` to **replace** with new content<br/> `1` to **append** new content <br/> `2` to **prepend** new content
-| contents | message content which supports various tags:<br/><br/>`{c:color}...{cr}` - sets text color, format: `R,G,B` or hex `RRGGBB` format <br/> `{i:uuid;width;height}` - displays an image with specific width and height <br/> `{al:left\|right\|center}` - align the current line <br/>`{ad:left\|right\|center}` - align the entire message <br/>`{b:width;height;channel;message}` - display a button with specific width/height, click sends the message on the channel<br/>`{ib:icon;width;height;channel;message}` - display an icon button with specific width and height, click sends the message on the channel
+| contents | message content which supports various tags (see tag list below) |
 
-  
+<details>
+  <summary>content tag list</summary>
+   
+| tag | desc |
+|-----------|-------------|
+|`{c:color}...{cr}` | display colored text<br/>format: `R,G,B` or hex `RRGGBB` |
+| `{i:uuid;width;height}` | displays an image with specified width and height |
+| `{ia:uuid;width;height;mode;sizex;sizey;start;length;rate}` | displays an animated image (same params as {i} and [llSetTextureAnim](https://wiki.secondlife.com/wiki/LlSetTextureAnim)) |
+| `{al:position}` | align the current line to the `left`, `right`, or `center`|
+| `{ad:position}` | align the entire message to the `left`, `right`, or `center` |
+| `{b:width;height;channel;message}` | display button of specific width/height, clicking sends message on channel |
+| `{ib:icon;width;height;channel;message}` | display icon button of specific width/height, clicking sends message on channel |
+ 
+</details>
+
 ## `@hudmsg_read:<identifier>=<channel>`
 retrieve the contents of the specified console, and send it via local chat on the specified channel
 
@@ -295,7 +319,7 @@ retrieve the contents of the specified console, and send it via local chat on th
 |-----------|-------------|
 | identifier | used to identify which console to affect |
 | channel | the channel to send the reply on
-  
+
 
 ## `@hudmsg_pos:<identifier>;<x>;<y>=force`
 set the postion of the specified console
@@ -322,7 +346,7 @@ set the duration that the specified console will be visible
 |-----------|-------------|
 | identifier | used to identify which console to affect |
 | duration | duration, in second, that the window will be visible<br/> use `0` to make permanently visible |
-  
+
 
 ## `@hudmsg_vis:<identifier>;<visibility>=force`
 change the visibility of the specified console
@@ -330,37 +354,31 @@ change the visibility of the specified console
 | param | desc |
 |-----------|-------------|
 | identifier | used to identify which console to affect |
-| visibility | `0` to hide the window<br/> `1` to show the window  
-  
+| visibility | `0` to hide the window<br/> `1` to show the window
+
 
 ## `@hudmsg_bg:<identifier>;<opacity>;<color>=force`
 change the background of the specified console
-  
+
 | param | desc |
 |-----------|-------------|
 | identifier | used to identify which console to affect |
 | opacity | value between `0.0` transparent and `1.0` opaque |
 | color | format: `R/G/B` where each value is between `0.0` and `1.0`
-  
 
-## `@hudmsg_xbtn:<identifier>;<visible>=force`
-make the window uncloseable (close button is hidden) or closeable (close button is visible)
+
+## `@hudmsg_btns:<identifier>;<close>;<resize>;<minify>;<scrollbar>;<passthrough>=force`
+control button visibility and window behavior for the specified console
 
 | param | desc |
 |-----------|-------------|
 | identifier | used to identify which console to affect |
-| visible | `0` close button is hidden<br/> `1` close button is visible
-  
+| close | `0` close button is hidden<br/> `1` close button is visible |
+| resize | `0` not resizeable (resize handles are hidden)<br/> `1` resizeable (resize handles are visible) |
+| minify | `0` minimize button is hidden<br/> `1` minimize button is visible |
+| scrollbar | `0` scrollbars are hidden<br/> `1` scrollbars are visible |
+| passthrough | `0` window captures mouse clicks normally<br/> `1` all mouse clicks pass through to the world (window cannot be dragged) |
 
-## `@hudmsg_resize:<identifier>;<resizeable>=force`
-enable or disable the resize grip for the specified console
-
-| param | desc |
-|-----------|-------------|
-|identifier | used to identify which console to affect |
-| resizeable |  `0`  not resizeable (resize handles are hidden) <br/> `1` resizeable (resize handles are visible) |
-
-  
 
 ## `@hudmsg_clear[:identifier]=force`
 clear all consoles or a specific one, this removes the window itself, it's text, images, etc.
@@ -368,3 +386,4 @@ clear all consoles or a specific one, this removes the window itself, it's text,
 | param | desc |
 |-----------|-------------|
 | identifier | (optional) used to indentify which console to affect |
+
