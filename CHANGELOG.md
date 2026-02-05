@@ -1,3 +1,62 @@
+## 7.2.3.80349 Jan 27 2026 [e5a2ed61ec]
+
+- UI Changes:
+    - allow exporting RAW terrain files by generating them locally from terrain height data in `Region/Estate > Terrain` (WIP: importing)
+    - allow users to export terrain and water as glTF file in `Region/Estate > Terrain floater`
+    - `Shift+Click` on an object face opens texture floaters (and material editor if using PBR)
+    - color picker in the build menu can now be opened all for objects, (read-only on non-modifiable objects)
+    - copy buttons in the build menu are now enabled for all objects
+    - allow using emojis in estate messages
+    - debug settings floater now supports regex search and resizing the settings list horizontally
+
+- Camera Changes:
+    - added `AERORenderNearClip` setting: min distance from camera at which objects are rendered, closer objects are are "clipped"
+    - added `AERORenderMaxFarPlane` setting: max distance from the camera at which objects are render, further objects are "clipped"
+    - lowered `MIN_NEAR_PLANE` constant from 0.1f to 0.001f to allow smaller near clip values
+    - automatically adjust far clip to maintain 10000:1 depth ratio to combat z-fighting when near clip is set very low
+
+- Misc Changes:
+    - increase avatar picker page size from 100 to 1000 for better results
+    - remove distance limit check for the poser model list
+    - poser model list now shows object names instead of UUIDs
+    - removed map privilege notifs
+    - added support for exporting bone translations to BVH files
+    - **EXPERIMENTAL [game_control](https://wiki.secondlife.com/wiki/Game_control) support, untested on Windows**
+
+
+### RLV changes
+view [AERO_RLV.md](https://github.com/plapper/plap/blob/main/AERO_RLV.md) for full documentation
+
+- new friend management RLV commnads:
+  * `@friend_get:<uuid>=<channel>` - get friend information
+  * `@friend_map:<uuid>=<channel>` - get friend map location
+  * `@friend_set:<uuid>;<online_rights>;<map_rights>;<edit_rights>=<channel>` - set friend rights
+  * `@friend_add:<uuid>=force` - add friend
+  * `@friend_remove:<uuid>[;force]=force` - remove friend
+  * `@friend_feed[:<uuid>]=<channel>` - subscribe to friend status updates
+   - location initially will return `0` if the friend's location is not
+  cached. this allows the LSL script to know to retry. if `-1` is return,
+  then it means you dont have map privileges, the friend is offline, or
+  the location is unknown.
+- add `@setcam_anchor` command that anchors camera to static global pos/object position
+    - `@setcam_anchor:<x/y/z>=force` - static goblocal pos
+    - `@setcame_anchor:<uuid>=force `- object position pos
+    - `@setcam_anchor:none=force `- clears the anchor
+- add `thirdperson` parameter to `@setcam_target:<uuid>[;<thirdperson>]=force`
+   - when `thirdperson` is 1, target tracking also applies to 3rd person view
+
+#### RLV HMC:
+- fixed issue where buttons would not work if the HMC was being updated repeatedly
+- replaced text-based alignment padding with proper alignment spacer
+- added animated image tag support `{ia:uuid;width;height;mode;columns;rows;start;frames;fps}`
+- no longer capture cursor focus when opened
+- added minimize button, scrollbar control
+- consolidate `@hudmsg_xbtn` and `@hudmsg_resize` into: `@hudmsg_btns:<ident>;<close>;<resize>;<minify>;<scrollbar>=force`
+- make floaters immune to Ctrl+W and Ctrl+Shift+W
+- add passthrough as 6th parameter to @hudmsg_btns command
+    - format: `@hudmsg_btns:<ident>;<close>;<resize>;<minify>;<scrollbar>;<passthrough>=force`
+    - when `passthrough` is 1, all mouseclicks pass through the window, including dragging
+
 ## 7.2.3.80275 Jan 1 2026 [7ff308bb44]
 - merged with the latest firestorm upstream changes to include:
     - omnifilter (block chat, dialogs, teleport offers, friendship, etc. based on content rather than just owner or sender)
