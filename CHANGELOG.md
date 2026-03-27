@@ -1,5 +1,110 @@
-## 7.2.3.80349 Jan 27 2026 [e5a2ed61ec]
+## 7.2.3.xxxxx MM DD YYYY [xxxxx]
 
+## NEW
+#### Notecard syntax highlighting
+- fix: new rule colors are now generated randomly and distinct from other colors in the set
+- fix: remove set/rule button now properly removes the selected set/rule
+- added `Random` color button next to rule color swatch
+- added ability to save/load pre-defined colors with the `Defined colors` button
+
+#### Misc
+- changed Linux default install path from `/opt/firestorm/` and `$HOME/firestorm` to `/opt/aero` and `$HOME/aero`
+- parcel/region-only object culling is now based on root prim position, instead of individual child prim positions
+  this makes it so objects with child prims outside of the current region/parcel are still properly rendered
+
+something about new cloning feature/ghosting thing
+something about rlv commands for cloning
+something about slua script syntax highlighting 
+something about other stuff i forgot
+
+## BUG FIXES
+
+
+## 7.2.3.80476 Mar 12 2025 [ccfcaf3d90]
+
+## NEW
+#### Texture Explorer
+- now keeps track of recent particle systems detected, up to 120s history
+- if live particle system is not found on the object, pull from recent particle systems history
+
+#### Animation Explorer
+- increase `MAX_ANIMATIONS` from 100 to 400
+- increase history window from 60s to 120s
+
+#### Particle Editor
+- add `AEROParticleEditorHistoryMax` debug setting to control max undo history depth
+- add undo/redo functionality, history size based on `AEROParticleEditorHistoryMax`
+- add randomize button to randomize particle editor settings
+- add randomization settings to adjust randomization value ranges, with load/save XML preset options
+- change import/export functionality from XML to inventory LSL scripts
+
+#### Notecard Syntax Highlighting
+- notecards can now have syntax highlighted based on regex rules that match the notecard's name
+- rules are grouped into "syntax sets", each with a name pattenr a a list of colorizing rules
+- managed via `Preferences > Aero > Notecard syntax`
+- special rule names `_BACKGROUND_`, `_FOREGROUND_`, `_SELECTED_`, `_CURSOR_` override the notecard editor's colors instead of matching patterns
+
+#### Upstream changes
+merged with the latest firestorm upstream changes:
+- UI: Add option to automatically group IM tabs by type like group IMs, conferences and 1 on 1 IMs
+- UI: `FIRE-33859` - Add +/- and reset buttons to hover height slider
+- UI: Update viewer-fonts (emoji) to use DejaVu 2.37 (was 2.30)
+- Poser: add modified-date column, add column headers, allow column-sorting
+- Audio: Update Fmod to 2.03.12
+
+#### Misc
+- added Aero tab to `Help > About Firestorm` for aero-specific info
+- `World > Environment > Save to Inventory` now saves settings with the actual name of the setting
+   description is saved as `REGION_NAME @ x,y,z`
+- outfit gallery can now be set to only show outfits with preview images
+
+## BUG FIXES
+- fixed debug setting controls disappearing AGAIN
+- fix debug settings floater regression without breaking bottom toolbar
+  
+## 7.2.3.80362 Feb 25 2026 [d6569f7ed2]
+
+## NEW
+##### Appearance/Outfits Panel
+- add `Show in Main View` to outfit gallery context menu, will show the selected outfit in the `Outfits` tab
+- add `Show in Gallery` to the outfits context menu, will show the selected outfit in the `Outfit Gallery` tab
+ - add `Scroll to Current Outfit` to both sort menus, scrolls to the currently worn outfit in the current tab
+- add `Random Outfit Filter` button to the floater, next to the `Random Outfit` button, to quickly change the `AERORandomOutfitFilter` setting
+
+##### Asset Management
+- all wearables can now be opened and inspected (read-only if no-mod)
+- add `Recreate Wearable` to inventory context menu to quickly re-create wearables
+- add texture swatch submenu with `Open` and `Copy UUID` options
+ `Copy UUID` or `Copy Asset UUID` buttons now post nearby chat messages: `AssetType> UUID: <uuid>`
+ 
+##### World Map
+- add `Copy Pos (G)` button to copy target positions' global coords (<xxxxx,yyyyy,zzzz>)
+- add `Copy Pos (R)` button to copy target posisiton's relative-to-avatar coords
+- add `Copy Pos (S)` button to copy target position's relative-to-sim-corner 
+- merge region name and advanced into (agent count, maturity rating) into a single line and use short labels
+
+##### Parcel/About Land
+- add `Custom` landing point button, allowing the ability to specific a custom landing point, event outside the parcel/region
+- note: appears to be limited to +/- 512m from the region's corner (0,0,
+
+##### Misc
+- new debug setting `AEROShowTextAllocFails` (default: false) to hide the USELESS on-screen texture allocation error counts
+
+## BUG FIXES
+-  restore `Hover Height` and `Tex Refresh` to the `Appearance` submenu, in the pie menu
+- fix control buttons/input being missing from the Debug Settings floater
+- removed the empty unused `Advanced > AERO` submenu
+- `Shift+Click` on object faces with materials no longer opens all textures, instead just opens the material editor window
+- increased space between spaces and text in top level menus
+
+[PREVIOUS CHANGES/VERSIONS](https://github.com/plapper/plap/blob/main/CHANGELOG.md)
+
+## 7.2.3.80353 Feb 9 2026 [a42c1abe0d]
+
+- Bug fixes:
+    - fixed issue where far clipping plane would be set to the current draw distance, instead of constant 1024
+    - fixed issue where nametag would show `--- ---` for friends with "Remove Display Name" enabled but not in a contact 
+    
 - UI Changes:
     - allow exporting RAW terrain files by generating them locally from terrain height data in `Region/Estate > Terrain` (WIP: importing)
     - allow users to export terrain and water as glTF file in `Region/Estate > Terrain floater`
@@ -8,6 +113,9 @@
     - copy buttons in the build menu are now enabled for all objects
     - allow using emojis in estate messages
     - debug settings floater now supports regex search and resizing the settings list horizontally
+    - add new target/anchor tab to cameratools floater
+    - add new targetr/anchor controls to phototools floater
+      Phototools (Alt+P) > Cam > Target/Anchor tab (bottom)
 
 - Camera Changes:
     - added `AERORenderNearClip` setting: min distance from camera at which objects are rendered, closer objects are are "clipped"
@@ -39,8 +147,8 @@ view [AERO_RLV.md](https://github.com/plapper/plap/blob/main/AERO_RLV.md) for fu
   then it means you dont have map privileges, the friend is offline, or
   the location is unknown.
 - add `@setcam_anchor` command that anchors camera to static global pos/object position
-    - `@setcam_anchor:<x/y/z>=force` - static goblocal pos
-    - `@setcame_anchor:<uuid>=force `- object position pos
+    - `@setcam_anchor:<x/y/z>;<strength>=force` - static global pos
+    - `@setcame_anchor:<uuid>/<bone>;<strength>=force `- object position pos
     - `@setcam_anchor:none=force `- clears the anchor
 - add `thirdperson` parameter to `@setcam_target:<uuid>[;<thirdperson>]=force`
    - when `thirdperson` is 1, target tracking also applies to 3rd person view
@@ -56,6 +164,8 @@ view [AERO_RLV.md](https://github.com/plapper/plap/blob/main/AERO_RLV.md) for fu
 - add passthrough as 6th parameter to @hudmsg_btns command
     - format: `@hudmsg_btns:<ident>;<close>;<resize>;<minify>;<scrollbar>;<passthrough>=force`
     - when `passthrough` is 1, all mouseclicks pass through the window, including dragging
+
+[PREVIOUS CHANGES/VERSIONS](https://github.com/plapper/plap/blob/main/CHANGELOG.md)
 
 ## 7.2.3.80275 Jan 1 2026 [7ff308bb44]
 - merged with the latest firestorm upstream changes to include:
